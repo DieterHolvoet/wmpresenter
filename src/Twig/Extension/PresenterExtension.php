@@ -1,26 +1,27 @@
 <?php
 
-namespace Drupal\wmcontroller\Twig\Extension;
+namespace Drupal\wmpresenter\Twig\Extension;
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\wmcontroller\Entity\HasPresenterInterface;
-use Drupal\wmcontroller\Service\Cache\Dispatcher;
-use Drupal\wmcontroller\Service\PresenterFactoryInterface;
+use Drupal\Core\Cache\CacheableDependencyInterface;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Render\RendererInterface;
+use Drupal\wmpresenter\Entity\HasPresenterInterface;
+use Drupal\wmpresenter\PresenterFactoryInterface;
 use Twig_SimpleFilter;
 
 class PresenterExtension extends \Twig_Extension
 {
     /** @var PresenterFactoryInterface */
     protected $presenterFactory;
-    /** @var Dispatcher */
-    protected $dispatcher;
+    /** @var RendererInterface */
+    protected $renderer;
 
     public function __construct(
         PresenterFactoryInterface $presenterFactory,
-        Dispatcher $dispatcher
+        RendererInterface $renderer
     ) {
         $this->presenterFactory = $presenterFactory;
-        $this->dispatcher = $dispatcher;
+        $this->renderer = $renderer;
     }
 
     public function getFilters()
@@ -47,8 +48,11 @@ class PresenterExtension extends \Twig_Extension
 
     protected function fetchPresenter($entity)
     {
-        if ($entity instanceof EntityInterface) {
-            $this->dispatcher->dispatchPresented($entity);
+        if ($entity instanceof CacheableDependencyInterface) {
+            $build = [];
+            CacheableMetadata::createFromObject($entity)
+                ->applyTo($build);
+            $this->renderer->render($build);
         }
 
         if ($entity instanceof HasPresenterInterface) {

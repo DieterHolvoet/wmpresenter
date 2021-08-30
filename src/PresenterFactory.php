@@ -1,26 +1,27 @@
 <?php
 
-namespace Drupal\wmcontroller\Service;
+namespace Drupal\wmpresenter;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\wmcontroller\Entity\HasPresenterInterface;
-use Drupal\wmcontroller\Entity\PresenterInterface;
-use Drupal\wmcontroller\Service\Cache\Dispatcher;
+use Drupal\Core\Render\RendererInterface;
+use Drupal\wmpresenter\Entity\HasPresenterInterface;
+use Drupal\wmpresenter\Entity\PresenterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class PresenterFactory implements PresenterFactoryInterface
 {
     /** @var ContainerInterface */
     protected $container;
-    /** @var Dispatcher */
-    protected $dispatcher;
+    /** @var RendererInterface */
+    protected $renderer;
 
     public function __construct(
         ContainerInterface $container,
-        Dispatcher $dispatcher
+        RendererInterface $renderer
     ) {
         $this->container = $container;
-        $this->dispatcher = $dispatcher;
+        $this->renderer = $renderer;
     }
 
     public function getPresenterForEntity(HasPresenterInterface $entity): PresenterInterface
@@ -29,7 +30,10 @@ class PresenterFactory implements PresenterFactoryInterface
         $presenter->setEntity($entity);
 
         if ($entity instanceof EntityInterface) {
-            $this->dispatcher->dispatchPresented($entity);
+            $build = [];
+            CacheableMetadata::createFromObject($entity)
+                ->applyTo($build);
+            $this->renderer->render($build);
         }
 
         return $presenter;

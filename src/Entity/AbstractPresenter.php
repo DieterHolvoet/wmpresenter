@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\wmcontroller\Entity;
+namespace Drupal\wmpresenter\Entity;
 
 abstract class AbstractPresenter implements PresenterInterface
 {
@@ -18,14 +18,21 @@ abstract class AbstractPresenter implements PresenterInterface
 
     public function __call($method, array $args)
     {
-        foreach ($this->methodNames($method) as $method) {
-            $call = [$this->entity, $method];
+        $methodNames = $this->methodNames($method);
+
+        foreach ($methodNames as $methodName) {
+            $call = [$this->entity, $methodName];
             if (is_callable($call)) {
                 return call_user_func_array($call, $args);
             }
         }
 
-        throw new \BadMethodCallException();
+        throw new \BadMethodCallException(sprintf(
+            'Methods with names %s do not exist on %s or %s.',
+            implode(', ', $methodNames),
+            get_class($this),
+            get_class($this->entity)
+        ));
     }
 
     public function setEntity($entity)

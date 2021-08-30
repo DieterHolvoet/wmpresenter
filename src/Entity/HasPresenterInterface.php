@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\wmcontroller\Entity;
+namespace Drupal\wmpresenter\Entity;
 
 interface HasPresenterInterface
 {

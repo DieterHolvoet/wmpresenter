@@ -1,0 +1,24 @@
+services:
+    wmpresenter.factory:
+        class: Drupal\wmpresenter\PresenterFactory
+        arguments:
+            - '@service_container'
+            - '@renderer'
+
+    wmpresenter.presenter:
+        class: Drupal\wmpresenter\Entity\AbstractPresenter
+        abstract: true
+        shared: false  # has no effect on children, leaving for future reference
+
+    wmpresenter.subscriber.template_parameter_presenter:
+        class: Drupal\wmpresenter\EventSubscriber\TemplateParameterPresenterSubscriber
+        tags: [{ name: event_subscriber }]
+        arguments:
+            - '@wmpresenter.factory'
+
+    wmpresenter.twig_extension.presenter:
+        class: Drupal\wmpresenter\Twig\Extension\PresenterExtension
+        arguments:
+            - '@wmpresenter.factory'
+            - '@renderer'
+        tags: [{ name: twig.extension }]
