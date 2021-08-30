@@ -3,7 +3,6 @@ services:
         class: Drupal\wmpresenter\PresenterFactory
         arguments:
             - '@service_container'
-            - '@renderer'
 
     wmpresenter.presenter:
         class: Drupal\wmpresenter\Entity\AbstractPresenter

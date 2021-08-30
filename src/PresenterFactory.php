@@ -13,28 +13,17 @@ class PresenterFactory implements PresenterFactoryInterface
 {
     /** @var ContainerInterface */
     protected $container;
-    /** @var RendererInterface */
-    protected $renderer;
 
     public function __construct(
-        ContainerInterface $container,
-        RendererInterface $renderer
+        ContainerInterface $container
     ) {
         $this->container = $container;
-        $this->renderer = $renderer;
     }
 
     public function getPresenterForEntity(HasPresenterInterface $entity): PresenterInterface
     {
         $presenter = $this->container->get($entity->getPresenterService());
         $presenter->setEntity($entity);
-
-        if ($entity instanceof EntityInterface) {
-            $build = [];
-            CacheableMetadata::createFromObject($entity)
-                ->applyTo($build);
-            $this->renderer->render($build);
-        }
 
         return $presenter;
     }
