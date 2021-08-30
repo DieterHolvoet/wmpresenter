@@ -4,6 +4,7 @@ namespace Drupal\wmpresenter\Entity;
 
 abstract class AbstractPresenter implements PresenterInterface
 {
+    /** @var mixed|null */
     protected $entity;
 
     public function __isset($prop)
@@ -30,12 +31,12 @@ abstract class AbstractPresenter implements PresenterInterface
         throw new \BadMethodCallException(sprintf(
             'Methods with names %s do not exist on %s or %s.',
             implode(', ', $methodNames),
-            get_class($this),
+            static::class,
             get_class($this->entity)
         ));
     }
 
-    public function setEntity($entity)
+    public function setEntity($entity): void
     {
         $this->entity = $entity;
     }
@@ -45,7 +46,7 @@ abstract class AbstractPresenter implements PresenterInterface
         return $this->entity;
     }
 
-    protected function methodNames($methodName)
+    protected function methodNames($methodName): array
     {
         $uc = ucfirst($methodName);
         return [$methodName, 'is' . $uc, 'get' . $uc, 'has' . $uc];

@@ -19,14 +19,14 @@ class TemplateParameterPresenterSubscriber implements EventSubscriberInterface
         $this->factory = $factory;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         $events[WmTwigEvents::TEMPLATE_PARAMETER][] = ['onTemplateParameter'];
 
         return $events;
     }
 
-    public function onTemplateParameter(TemplateParameterEvent $event)
+    public function onTemplateParameter(TemplateParameterEvent $event): void
     {
         $value = $event->getValue();
 
@@ -41,9 +41,10 @@ class TemplateParameterPresenterSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($value instanceof HasPresenterInterface) {
-            $event->setValue($this->factory->getPresenterForEntity($value));
+        if (!$value instanceof HasPresenterInterface) {
             return;
         }
+
+        $event->setValue($this->factory->getPresenterForEntity($value));
     }
 }

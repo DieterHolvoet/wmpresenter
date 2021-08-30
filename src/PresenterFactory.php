@@ -2,9 +2,6 @@
 
 namespace Drupal\wmpresenter;
 
-use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Render\RendererInterface;
 use Drupal\wmpresenter\Entity\HasPresenterInterface;
 use Drupal\wmpresenter\Entity\PresenterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
