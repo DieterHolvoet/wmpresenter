@@ -73,6 +73,17 @@ In code, presenters can be loaded using
 In Twig, presenters can be loaded by passing the entity through the `p` or `presenter` filters. When passing an array
 of entities, all entities will be converted to their presenter counterparts.
 
+### Twig\Sandbox\SecurityError: Calling method on a _\<presenter\>_ object is not allowed
+Twig has a whitelist feature that prevent people from calling methods on unknown classes in Twig templates. In order to
+allow you to use presenters in Twig templates, you'll have to change the whitelist by adding the following to your 
+`settings.php`:
+
+```php
+$settings['twig_sandbox_whitelisted_classes'] = [
+    \Drupal\wmpresenter\Entity\PresenterInterface::class,
+];
+```
+
 ## Changelog
 All notable changes to this project will be documented in the
 [CHANGELOG](CHANGELOG.md) file.
