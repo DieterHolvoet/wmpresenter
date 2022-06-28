@@ -10,9 +10,9 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "drupal/core": "^8 || ^9",
-        "wieni/wmtwig": "dev-main"
+        "php": "^8.0",
+        "drupal/core": "^9.1",
+        "wieni/wmtwig": "^1.0"
     },
     "require-dev": {
         "composer-runtime-api": "^2.0",
