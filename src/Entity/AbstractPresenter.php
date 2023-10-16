@@ -2,8 +2,13 @@
 
 namespace Drupal\wmpresenter\Entity;
 
-abstract class AbstractPresenter implements PresenterInterface
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Cache\RefinableCacheableDependencyTrait;
+
+abstract class AbstractPresenter implements RefinableCacheableDependencyInterface, PresenterInterface
 {
+    use RefinableCacheableDependencyTrait;
+
     /** @var mixed|null */
     protected $entity;
 
@@ -39,6 +44,7 @@ abstract class AbstractPresenter implements PresenterInterface
     public function setEntity($entity): void
     {
         $this->entity = $entity;
+        $this->addCacheableDependency($this->entity);
     }
 
     public function getEntity()
